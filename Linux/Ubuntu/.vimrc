@@ -19,6 +19,7 @@ Plugin 'funorpain/vim-cpplint'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'bling/vim-airline'
+Plugin 'wincent/command-t'
 
 call vundle#end()
 
@@ -94,7 +95,7 @@ nnoremap <tab> %
 vnoremap <tab> %
 set showmode
 set showcmd
-set visualbell
+"set visualbell
 set cursorline
 set ttyfast
 set wrap
@@ -111,6 +112,5 @@ inoremap <left> <nop>
 inoremap <right> <nop>
 nnoremap j gj
 nnoremap k gk
-nnoremap ; :
 inoremap jj <ESC>
 au FocusLost * :wa
