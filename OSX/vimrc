@@ -14,8 +14,9 @@ function! DoRemote(arg)
 endfunction
 Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
 " Syntax checking plugin for Vim that runs files through external syntax checkers
-Plug 'scrooloose/syntastic'
-Plug 'nvie/vim-flake8'
+"Plug 'scrooloose/syntastic'
+"Plug 'nvie/vim-flake8'
+Plug 'neomake/neomake'
 " A simple, easy-to-use Vim alignment plugin
 Plug 'junegunn/vim-easy-align'
 " A formatter for C, C++, Obj-C, Java, JavaScript and TypeScript
@@ -33,6 +34,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'terryma/vim-multiple-cursors'
 " vim bundle for Racket
 Plug 'wlangstroth/vim-racket'
+" vim plugin for JavaScript syntax
+"Plug 'othree/yajs.vim'
 
 call plug#end()
 
@@ -93,6 +96,53 @@ nnoremap <leader>r :call NumberToggle()<cr>
 "let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf_c.py'
 "let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf_cpp.py'
 "let g:ycm_confirm_extra_conf = 0
+
+" neomake config
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_python_python_exec = '/usr/local/var/pyenv/shims/python'
+"let g:syntastic_python_checkers = ['flake8']
+"let g:syntastic_javascript_checkers = ['eslint', 'jsxlint']
+"let g:syntastic_error_symbol = '❌'
+"let g:syntastic_style_error_symbol = '⁉️'
+"let g:syntastic_warning_symbol = '⚠️'
+"let g:syntastic_style_warning_symbol = '💩'
+autocmd! BufWritePost * Neomake
+let g:neomake_open_list = 2
+"let g:neomake_javascript_jscs_maker = {
+    "\ 'exe': 'jscs',
+    "\ 'args': ['--no-colors', '--preset', 'airbnb', '--reporter', 'inline'],
+    "\ 'errorformat': '%f: line %l\, col %c\, %m',
+    "\ }
+let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_warning_sign = {
+  \ 'text': 'W',
+  \ 'texthl': 'WarningMsg',
+  \ }
+let g:neomake_error_sign = {
+  \ 'text': 'E',
+  \ 'texthl': 'ErrorMsg',
+  \ }
+let g:neomake_verbose=1
+let g:neomake_logfile='/Users/user/neomake.log'
+
+" clang-format config
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11"}
+
+" map to <Leader>= in C++ and JavaScript code
+autocmd FileType c,cpp,objc,javascript nnoremap <buffer><Leader>= :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc,javascript vnoremap <buffer><Leader>= :ClangFormat<CR>
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
 
 " remap easy-align hotkey from default ga to <Leader>a
 vmap <Leader>a <Plug>(EasyAlign)
