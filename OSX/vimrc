@@ -88,20 +88,18 @@ endfunc
 " Toggle between normal and relative numbering.
 nnoremap <leader>r :call NumberToggle()<cr>
 
-" neomake config
+" neomake config, used as a linter for Python and JavaScript, a builder for C
 autocmd! BufWritePost * Neomake
+set statusline+=\ %#ErrorMsg#%{neomake#statusline#QflistStatus('qf:\ ')}
 let g:neomake_open_list = 2
+" the external JavaScript linter eslint is installed with npm
 let g:neomake_javascript_enabled_makers = ['eslint']
-let g:neomake_warning_sign = {
-  \ 'text': 'W',
-  \ 'texthl': 'WarningMsg',
-  \ }
-let g:neomake_error_sign = {
-  \ 'text': 'E',
-  \ 'texthl': 'ErrorMsg',
-  \ }
-let g:neomake_verbose=1
-let g:neomake_logfile='/Users/user/neomake.log'
+" the external Python linter flake8 is installed with homebrew
+let g:neomake_python_enabled_makers = ['flake8']
+let g:neomake_warning_sign = { 'text': 'W>', 'texthl': 'WarningMsg' }
+let g:neomake_error_sign = { 'text': 'E>', 'texthl': 'ErrorMsg' }
+"let g:neomake_verbose=3
+"let g:neomake_logfile='/Users/user/neomake.log'
 
 " remap easy-align hotkey from default ga to <Leader>a
 vmap <Leader>a <Plug>(EasyAlign)
@@ -146,6 +144,7 @@ set wrap
 set textwidth=79
 set formatoptions=qrn1
 set colorcolumn=85
+" disable arrows key
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -158,7 +157,12 @@ nnoremap j gj
 nnoremap k gk
 inoremap jj <ESC>
 au FocusLost * :wa
-
+" Copy to system clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  "+yg_
+nnoremap  <leader>y  "+y
+nnoremap  <leader>yy  "+yy
+" Switch between splits
 nmap <C-h> <C-W>h
 nmap <C-j> <C-W>j
 nmap <C-k> <C-W>k
