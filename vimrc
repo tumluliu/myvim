@@ -13,12 +13,17 @@ function! DoRemote(arg)
     UpdateRemotePlugins
 endfunction
 Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+" deoplete.nvim autocompletion source for Python
+Plug 'zchee/deoplete-jedi'
+" Perform all your vim insert mode completions with the <Tab> key
+Plug 'ervandew/supertab'
 " Async syntax checking plugin that runs files through external syntax checkers
 Plug 'neomake/neomake'
 " A simple, easy-to-use Vim alignment plugin
 Plug 'junegunn/vim-easy-align'
 " A formatter for a various of languages
 Plug 'Chiel92/vim-autoformat'
+Plug 'maksimr/vim-jsbeautify'
 " lean & mean status/tabline for vim that's light as air
 Plug 'vim-airline/vim-airline'
 " A general-purpose command-line fuzzy finder
@@ -29,9 +34,11 @@ Plug 'tpope/vim-surround'
 " Git wrapper
 Plug 'tpope/vim-fugitive'
 " True Sublime Text style multiple selections for Vim
-Plug 'terryma/vim-multiple-cursors'
+"Plug 'terryma/vim-multiple-cursors'
 " vim bundle for Racket
-Plug 'wlangstroth/vim-racket'
+"Plug 'wlangstroth/vim-racket'
+" A vim plugin for syntax highlighting Ansible's common filetypes
+Plug 'pearofducks/ansible-vim'
 
 call plug#end()
 
@@ -40,6 +47,8 @@ call plug#end()
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 " Set cursor shapes for different modes
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+" Enable deoplete autocompletion on startup
+let g:deoplete#enable_at_startup=1
 
 let mapleader="\<SPACE>"
 
@@ -58,7 +67,6 @@ set statusline+=%{fugitive#statusline()}
 set relativenumber
 set undofile
 set number
-set esckeys
 set ts=4
 set sw=4
 set hlsearch
@@ -66,6 +74,7 @@ set ai
 set ci
 set et
 set ruler
+set mouse=a
 
 colorscheme gruvbox
 if has("gui_running")
@@ -112,6 +121,21 @@ nmap <F8> :NERDTreeToggle<CR>
 noremap <F3> :Autoformat<CR>
 let g:autoformat_verbosemode=1
 let g:formatters_python = ['yapf']
+" config vim-jsbeautify
+".vimrc
+map <c-f> :call JsBeautify()<cr>
+" or
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+" for json
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+" for jsx
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+" for html
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+" for css or scss
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+" for YAML in Ansible
+autocmd FileType yaml setl sw=2 sts=2 et
 
 " make vim-airline use powerline symbols
 let g:airline_powerline_fonts = 1
@@ -127,13 +151,13 @@ let g:airline_right_sep = ' '
 let g:airline_right_alt_sep = '|'
 let g:airline_theme = 'gruvbox'
 
-" config for multi-cursors
-let g:multi_cursor_use_default_mapping=0
+" config for multiple-cursors
+"let g:multi_cursor_use_default_mapping=0
 " Default mapping
-let g:multi_cursor_next_key='<C-m>'
-let g:multi_cursor_prev_key='<C-p>'
-let g:multi_cursor_skip_key='<C-x>'
-let g:multi_cursor_quit_key='<Esc>'
+"let g:multi_cursor_next_key='<C-m>'
+"let g:multi_cursor_prev_key='<C-p>'
+"let g:multi_cursor_skip_key='<C-x>'
+"let g:multi_cursor_quit_key='<Esc>'
 
 nnoremap <leader><space> :noh<cr>
 nnoremap <tab> %
@@ -169,11 +193,4 @@ nmap <C-k> <C-W>k
 nmap <C-l> <C-W>l
 if has('nvim')
     nmap <BS> <C-W>h
-endif
-
-" vim-racket
-if has("autocmd")
-    au BufReadPost *.rkt,*.rktl set filetype=racket
-    au filetype racket set lisp
-    au filetype racket set autoindent
 endif
