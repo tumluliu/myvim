@@ -59,6 +59,7 @@ if has('syntax') && !exists('g:syntax_on')
     syntax enable
 endif
 
+set directory=~/tmp
 set showmode
 set showmatch
 set showcmd
